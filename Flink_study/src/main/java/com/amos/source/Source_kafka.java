@@ -1,5 +1,6 @@
 package com.amos.source;
 
+import com.amos.util.StartUpClass;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -16,21 +17,15 @@ import java.util.Properties;
 public class Source_kafka {
     public static void main(String[] args) throws Exception{
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-        env.enableCheckpointing(5000);
-
-        Properties properties = new Properties();
-        properties.setProperty("bootstrap.servers", "hadoop01:9092,hadoop02:9092,hadoop03:9092");
-        properties.setProperty("group.id", "flink-kafka-002");
-        properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("auto.offset", "latest");
+        StartUpClass startUpClass = new StartUpClass();
+        StreamExecutionEnvironment env = startUpClass.getEnv();
 
 
-        DataStreamSource<String> kafkaSource = env.addSource(new FlinkKafkaConsumer<String>("flink-kafka", new SimpleStringSchema(), properties));
-
-        kafkaSource.print();
+        DataStreamSource<String> stringDataStreamSource = env.addSource(
+                new FlinkKafkaConsumer<String>(startUpClass.getTopic(),
+                        new SimpleStringSchema(),
+                        startUpClass.getProperties()));
+        stringDataStreamSource.print();
         env.execute();
 
     }
