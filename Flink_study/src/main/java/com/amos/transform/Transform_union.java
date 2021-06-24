@@ -1,6 +1,7 @@
 package com.amos.transform;
 
 import com.amos.source.MyKafkaDeserializationSchema2;
+import com.amos.util.StartUpClass;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.collector.selector.OutputSelector;
@@ -23,20 +24,15 @@ import java.util.Properties;
 public class Transform_union {
     public static void main(String[] args) throws Exception{
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StartUpClass startUpClass = new StartUpClass();
+        StreamExecutionEnvironment env = startUpClass.getEnv();
 
-        env.enableCheckpointing(5000);
 
-        Properties properties = new Properties();
+        DataStreamSource<Tuple3<String,String,String>> streamSource = env.addSource(
+                new FlinkKafkaConsumer<>(startUpClass.getTopic(),
+                new MyKafkaDeserializationSchema2(),
+                startUpClass.getProperties()));
 
-        properties.setProperty("bootstrap.servers", "hadoop01:9092,hadoop02:9092,hadoop03:9092");
-        properties.setProperty("group.id", "flink-kafka-002");
-        properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("auto.offset", "latest");
-
-        DataStreamSource<Tuple3<String, String, String>> streamSource = env.addSource(new FlinkKafkaConsumer<>("flink-kafka",
-                new MyKafkaDeserializationSchema2(), properties));
         SplitStream<Tuple2<String, String>> splitStream = streamSource.map(new MapFunction<Tuple3<String, String, String>, Tuple2<String, String>>() {
             @Override
             public Tuple2<String, String> map(Tuple3<String, String, String> value) throws Exception {

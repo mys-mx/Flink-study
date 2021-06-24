@@ -1,6 +1,7 @@
 package com.amos.transform;
 
 import com.amos.bean.CarSpeedInfo;
+import com.amos.util.StartUpClass;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -21,18 +22,14 @@ import java.util.Properties;
  */
 public class TransForm_RollingAggregation {
     public static void main(String[] args) throws Exception{
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.enableCheckpointing(5000);
+        StartUpClass startUpClass = new StartUpClass();
+        StreamExecutionEnvironment env = startUpClass.getEnv();
 
-        Properties properties = new Properties();
 
-        properties.setProperty("bootstrap.servers", "hadoop01:9092,hadoop02:9092,hadoop03:9092");
-        properties.setProperty("group.id", "flink-kafka-002");
-        properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("auto.offset", "latest");
-        DataStreamSource<String> source = env.addSource(new FlinkKafkaConsumer<String>("flink-kafka", new SimpleStringSchema(), properties));
-
+        DataStreamSource<String> stringDataStreamSource = env.addSource(
+                new FlinkKafkaConsumer<String>(startUpClass.getTopic(),
+                new SimpleStringSchema(),
+                startUpClass.getProperties()));
 /*        source.map(new MapFunction<String, Tuple2<String,Long>>() {
             @Override
             public Tuple2<String,Long> map(String s) throws Exception {
@@ -44,7 +41,7 @@ public class TransForm_RollingAggregation {
 
 
        //lambdas
-        source.map(line->{
+        stringDataStreamSource.map(line->{
             String[] strings = line.split("\t");
             CarSpeedInfo carSpeedInfo = new CarSpeedInfo(Long.parseLong(strings[0]),strings[1],strings[2],Integer.parseInt(strings[3]));
 

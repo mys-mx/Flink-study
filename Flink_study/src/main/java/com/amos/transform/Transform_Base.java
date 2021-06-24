@@ -1,5 +1,6 @@
 package com.amos.transform;
 
+import com.amos.util.StartUpClass;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -20,20 +21,14 @@ import java.util.Properties;
  */
 public class Transform_Base {
     public static void main(String[] args) throws Exception {
+        StartUpClass startUpClass = new StartUpClass();
+        StreamExecutionEnvironment env = startUpClass.getEnv();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        env.enableCheckpointing(5000);
-
-        Properties properties = new Properties();
-
-        properties.setProperty("bootstrap.servers", "hadoop01:9092,hadoop02:9092,hadoop03:9092");
-        properties.setProperty("group.id", "flink-kafka-002");
-        properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.setProperty("auto.offset", "latest");
-
-        DataStreamSource<String> stringDataStreamSource = env.addSource(new FlinkKafkaConsumer<String>("flink-kafka", new SimpleStringSchema(), properties));
+        DataStreamSource<String> stringDataStreamSource = env.addSource(
+                new FlinkKafkaConsumer<String>(startUpClass.getTopic(),
+                new SimpleStringSchema(),
+                startUpClass.getProperties()));
 
 
         //map 把String转换成长度输出
