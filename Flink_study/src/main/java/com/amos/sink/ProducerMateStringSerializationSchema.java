@@ -18,6 +18,8 @@ public class ProducerMateStringSerializationSchema implements KafkaContextAware<
     @Override
     public void setParallelInstanceId(int parallelInstanceId) {
 
+
+
     }
 
     @Override
