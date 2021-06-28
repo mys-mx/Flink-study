@@ -19,7 +19,7 @@ public class StartUpClass {
         env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         env.enableCheckpointing(5000);
-        env.setParallelism(2);
+        env.setParallelism(3);
         properties = new Properties();
 
         properties.setProperty("bootstrap.servers", "hadoop01:9092,hadoop02:9092,hadoop03:9092");
