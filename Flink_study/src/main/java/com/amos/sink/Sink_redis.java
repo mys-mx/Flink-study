@@ -60,6 +60,7 @@ public class Sink_redis {
             return new RedisCommandDescription(RedisCommand.HSET, "sensor_speed");
         }
 
+
         @Override
         public String getKeyFromData(CarSpeedInfo carSpeedInfo) {
             return carSpeedInfo.getCarId();
