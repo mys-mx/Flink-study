@@ -38,6 +38,7 @@ public class Sink_Kafka {
                 "hadoop01:9092,hadoop02:9092,hadoop03:9092",
                 "sinktest",
                 new SimpleStringSchema()));*/
+
         source.addSink(new FlinkKafkaProducer<String>(
                 "sink",
                 new ProducerStringSerializationSchema("sink"),
