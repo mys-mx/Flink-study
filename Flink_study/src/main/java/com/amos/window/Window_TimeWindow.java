@@ -24,6 +24,7 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
+import org.apache.flink.util.OutputTag;
 
 import java.util.Collection;
 
@@ -85,8 +86,22 @@ public class Window_TimeWindow {
                     }
                 });
 
+        // 3. 其他API
+        OutputTag<CarSpeedInfo> outputTag = new OutputTag<CarSpeedInfo>("late") {
+        };
+        SingleOutputStreamOperator<CarSpeedInfo> sum = streamOperator.keyBy("carId")
+                .timeWindow(Time.seconds(3))
+                .allowedLateness(Time.minutes(1))//允许一分钟的迟到数据
+                .sideOutputLateData(outputTag)//侧数据流 兜底的 一分钟之后的数据继续流入下一个流中
+                .sum("speed");
+
+        //收集侧数据流
+        sum.getSideOutput(outputTag).print();
+
 //        result.print("");
         resultStream.print();
         env.execute();
     }
+
+
 }
