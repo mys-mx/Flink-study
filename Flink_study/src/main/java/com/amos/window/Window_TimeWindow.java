@@ -28,10 +28,10 @@ import org.apache.flink.util.Collector;
 import java.util.Collection;
 
 /**
- * @Title: window_TimeWindow
+ * @Title: Window_TimeWindow
  * @Date: 2021/6/28 22:06
  */
-public class window_TimeWindow {
+public class Window_TimeWindow {
     public static void main(String[] args) throws Exception {
         StartUpClass startUpClass = new StartUpClass();
         StreamExecutionEnvironment env = startUpClass.getEnv();
@@ -84,6 +84,7 @@ public class window_TimeWindow {
                         out.collect(new Tuple3<>(tuple.getField(0),window.getEnd(),size));
                     }
                 });
+
 //        result.print("");
         resultStream.print();
         env.execute();
