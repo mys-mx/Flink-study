@@ -59,6 +59,7 @@ public class Window_EventTimeWindow {
                 .minBy("temperature");
 
         minTempStream.print("min temperature");
+        //侧输出流的结果要怎么操作自己规划
         minTempStream.getSideOutput(outputTag).print("late");
         env.execute();
     }
