@@ -15,10 +15,10 @@ import org.apache.flink.util.Collector;
 import scala.Tuple3;
 
 /**
- * @Title: StateTest3_KeyedStateApplicationCase
+ * @Title: State_KeyedStateApplicationCase
  * @Date: 2021/7/4 19:02
  */
-public class StateTest3_KeyedStateApplicationCase {
+public class State_KeyedStateApplicationCase {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
