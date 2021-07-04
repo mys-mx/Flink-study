@@ -48,7 +48,7 @@ public class StateTest3_KeyedStateApplicationCase {
     }
 
 
-    private static class MyKeyCountMapper extends RichFlatMapFunction<SensorReading, Tuple3<String,Double,Double>> {
+    private static class MyKeyCountMapper extends RichFlatMapFunction<SensorReading, Tuple3<String, Double, Double>> {
         private Double threshold;
 
         public MyKeyCountMapper(Double threshold) {
@@ -57,21 +57,22 @@ public class StateTest3_KeyedStateApplicationCase {
 
         //定义状态，保存上一次的温度值
         private ValueState<Double> lastTempState;
+
         @Override
         public void open(Configuration parameters) throws Exception {
 
-            lastTempState=getRuntimeContext().getState(new ValueStateDescriptor<Double>("last-temp",Double.class));
+            lastTempState = getRuntimeContext().getState(new ValueStateDescriptor<Double>("last-temp", Double.class));
 
         }
 
         @Override
         public void flatMap(SensorReading value, Collector<Tuple3<String, Double, Double>> out) throws Exception {
 
-            Double temperature = value.getTemperature();
-            if(temperature!=null){
-                double abs = Math.abs(value.getTimeStamp() - temperature);
-                if(abs>=10.0){
-                    out.collect(new Tuple3<>(value.getId(),value.getTemperature(),temperature));
+            Double temperature = lastTempState.value();
+            if (temperature != null) {
+                double diff = Math.abs(value.getTemperature() - temperature);
+                if (diff >= threshold) {
+                    out.collect(new Tuple3<>(value.getId(), value.getTemperature(), temperature));
                 }
             }
 
