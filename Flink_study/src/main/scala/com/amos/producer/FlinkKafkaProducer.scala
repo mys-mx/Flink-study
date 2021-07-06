@@ -27,18 +27,23 @@ object FlinkKafkaProducer {
     val producer = new KafkaProducer[String, String](properties)
 
     val iterator = Source.fromFile("./data/carFlow_all_column_test.txt").getLines()
-    for (i <- 1 to 100) {
 
+
+    for (i <- 1 to 100) {
       for (elem <- iterator) {
         val arr: Array[String] = elem.split(",")
         val monitorId = arr(0).replace("'", "")
         val carId = arr(2).replace("'", "")
         val timeStamp = arr(4).replace("'", "")
         val speed = arr(6).replace("'", "")
+
+
         val builder = new StringBuilder
         val info: StringBuilder = builder.append(monitorId + "\t").append(carId + "\t").append(timeStamp + "\t").append(speed)
 
-        producer.send(new ProducerRecord[String, String]("flink-kafka", i + "", info.toString()))
+        Thread.sleep(300)
+        val str = info.toString()
+        producer.send(new ProducerRecord[String, String]("flink-kafka", i + "", str))
 
       }
     }
