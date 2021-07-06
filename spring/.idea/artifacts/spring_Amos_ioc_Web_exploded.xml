@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="spring_Amos_ioc:Web exploded">
+    <output-path>$PROJECT_DIR$/spring_Amos/artifacts/spring_Amos_ioc_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="spring_Amos_ioc/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="javaee-facet-classes" facet="spring_Amos_ioc/web/Web" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
