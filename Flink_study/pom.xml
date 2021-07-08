@@ -97,6 +97,23 @@
             <artifactId>flink-connector-kafka_2.11</artifactId>
             <version>${flink-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner_2.11</artifactId>
+            <version>${flink-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java-bridge_2.11</artifactId>
+            <version>${flink-version}</version>
+        </dependency>
+
+        <!--alibaba 的blink依赖-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner-blink_2.11</artifactId>
+            <version>${flink-version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -115,8 +132,10 @@
             </plugin>
             <!--打jar包的依赖-->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4</version>
+
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
