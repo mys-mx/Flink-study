@@ -15,7 +15,7 @@ import org.apache.flink.types.Row;
  * @description:flinkTable Api
  * @create: 2021-07-08 19:06
  */
-public class Example {
+public class Table_Example {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
