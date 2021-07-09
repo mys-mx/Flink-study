@@ -61,7 +61,7 @@ public class Table_KafkaPipline {
 
 
 
-        //数据写出到kafka
+        //输出到kafka
         filterTable.insertInto("outputTable");
 
         env.execute();
