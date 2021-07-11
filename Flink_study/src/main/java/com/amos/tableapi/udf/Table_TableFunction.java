@@ -19,7 +19,7 @@ import org.apache.flink.types.Row;
  * 函数通过registerFunction()方法在TableEnvironment中注册，当用户定义的函数被注册时，
  * 它被插入到TableEnvironment的函数目录中，这样Table API 或 SQL解析器就可以识别并正确地解释它
  * <p>
- * 1.table function （表函数）：用户定义得表函数，可以将0、1或多个标量值作为输入参数；与标量函数不同的是
+ * 1.table function （表函数）  一对多：用户定义得表函数，可以将0、1或多个标量值作为输入参数；与标量函数不同的是
  * 它可以返回任意数量的行作为输出，而不是单个值
  * @create: 2021-07-10 19:30
  */
